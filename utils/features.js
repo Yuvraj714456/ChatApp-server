@@ -5,10 +5,10 @@ import {v2 as cloudinary} from 'cloudinary'
 import { getBase64, getSockets } from "../lib/helper.js"
 
 const cookie_option= {
-        maxAge:15*24*60*60*1000,
-        sameSite:"none",
-        httpOnly:true,
-        secure:true
+        httpOnly: true,
+        secure: true,           
+        sameSite: "None",       
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     } 
  
 const connectDB = (url)=>{
@@ -70,9 +70,14 @@ const uploadFilesToCloudinary = async (files=[])=>{
     }
 }
 
-const deleteFileFromCloudinary = async (public_id)=>{
-    // delete files from cloudinary
-}
+const deleteFileFromCloudinary = async (public_id) => {
+  try {
+    const result = await cloudinary.uploader.destroy(public_id);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
 
 
 export {connectDB,sendToken,cookie_option,emitEvent,deleteFileFromCloudinary,uploadFilesToCloudinary};

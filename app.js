@@ -18,6 +18,7 @@ import { Message } from './models/message.js';
 import userRoute from './routes/user.js'
 import chatRoute from './routes/chat.js'
 import  adminRoute from './routes/admin.js'
+import { ErrorHandler } from './utils/utility.js';
 
 
 
@@ -70,7 +71,17 @@ app.get('/',(req,res)=>{
 io.use((socket,next)=>{
     cookieParser()(socket.request,
                    socket.request.res || {},
-                   async (err)=>{await socketAuthenticator(err,socket,next);
+                   async (err)=>{
+                    if(err){
+                        console.error("Cookie parsing error",err);
+                        return next(new ErrorHandler("Authentication err"));
+                    }
+
+                    try {
+                        await socketAuthenticator(err,socket,next);
+                    } catch (error) {
+                            return next(new ErrorHandler("Authentication err"));
+                    }
     })
 })
 
