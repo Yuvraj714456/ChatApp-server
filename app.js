@@ -36,7 +36,17 @@ cloudinary.config({
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server,{cors:corsOptions});
+const io = new Server(server,{
+  cors: {
+    origin: [
+      process.env.CLIENT_URL,
+      "http://localhost:5173",
+      "http://localhost:3000"
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
 
 app.set("io",io);
 
