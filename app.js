@@ -20,9 +20,6 @@ import chatRoute from './routes/chat.js'
 import  adminRoute from './routes/admin.js'
 import { ErrorHandler } from './utils/utility.js';
 
-
-
-
 dotenv.config();
 
 export const userSocketIDs = new Map();
@@ -50,8 +47,6 @@ const io = new Server(server,{
 });
 
 app.set("io",io);
-
-
 
 const PORT = process.env.PORT || 3000;
 
@@ -87,6 +82,11 @@ io.use((socket,next)=>{
 
 io.on("connection",(socket)=>{
     const user = socket.user;
+
+    if (!user || !user._id) {
+        console.error("❌ No user found on socket. Disconnecting...");
+        return socket.disconnect(true);
+    }
 
     userSocketIDs.set(user._id.toString(),socket.id);
 

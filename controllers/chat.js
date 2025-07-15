@@ -48,7 +48,7 @@ const  getMyChat = TryCatch(async (req,res,next)=>{
         return {
             _id,
             isGroup,
-            avatar:isGroup?members.slice(0,3).map(({avatar})=>avatar.url):[otherMember.avatar.url],
+            avatar:isGroup?"":[otherMember.avatar.url],
             name:isGroup? name: otherMember.name,
             members:members.reduce((prev,curr)=>{
                 if(curr._id.toString() !== req.user.toString()){
